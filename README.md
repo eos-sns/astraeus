@@ -20,7 +20,7 @@ You want to share datasets (.txt, .bin, .hdf5 ...) via downloads. You want
 $ pip install .
 ```
 
-## Dependencies
+### Dependencies
 ```bash
 $ $(which pkg manager) install memcached libmemcached-tools  # install memcache
 ```
