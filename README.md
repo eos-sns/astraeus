@@ -35,8 +35,8 @@ else:
 There are many:
 
 - `hash function`, see `astraeus.models.astraeus.Hasher`, the base class
-- `memcache client`, see `astraeus.models.memcache.MemcacheClientBuilder`, the 
-builder class
+- `memcache client`, see `astraeus.models.memcache.MemcacheClientBuilder`, the builder class
+- `MongoDB redudancy plugin`, see `astraeus.models.astraeus.MongoAstraeus`
 
 ## Install
 

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import abc
+import datetime
 import uuid
 
 from astraeus.models.memcache import MemcacheClientBuilder, MemcacheFacade
+from models.mongodb import MongoDBBuilder
 
 
 class Hasher:
@@ -67,4 +69,48 @@ class MongoAstraeus(Astraeus):
     """ Normal Astraeus, but saves data also in MongoDB for reduncancy
     reasons """
 
-    MONGO_DB = ''
+    MONGO_DB = 'astraeus'
+
+    def __init__(self,
+                 mongo_collection,
+                 mongo_db=MONGO_DB,
+                 port=super().MEMCACHE_PORT,
+                 expire_seconds=super().EXPIRE_SECONDS,
+                 hash_function=UUIDHasher().hash_key):
+        super().__init__(port, expire_seconds, hash_function)
+
+        self.mongo = MongoDBBuilder() \
+            .with_db(mongo_db) \
+            .build()
+        self.mongo = self.mongo[mongo_collection]  # specify collection
+
+    def save(self, val):
+        key = super().save(val)
+        if key:
+            item = self.build_mongo_item(key, val)
+            self.mongo.insert_one(item)
+            return key
+
+        return None
+
+    def retrieve(self, key):
+        val = super().retrieve(key)
+        if val:  # memcached worked perfectly -> no need to fetch it from Mongo
+            return val
+
+        results = self.mongo.find({'key': key})
+        if results:
+            results = sorted(results, key=lambda x: x['time'])  # sort by date
+            most_recent = results[-1]
+            return most_recent[key]
+
+        return None
+
+    @staticmethod
+    def build_mongo_item(key, val):
+        time_now = datetime.datetime.now()
+        return {
+            'key': key,
+            'val': val,
+            'time': time_now
+        }
