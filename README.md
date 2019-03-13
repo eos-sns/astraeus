@@ -8,6 +8,7 @@
 
 
 ## Use case
+
 You want to share datasets (.txt, .bin, .hdf5 ...) via downloads. You want
 
 - that the download links are available for just a restricted time frame
@@ -16,6 +17,7 @@ You want to share datasets (.txt, .bin, .hdf5 ...) via downloads. You want
 - hide the true location of files
 
 ## Example
+
 ```python
 astraeus = Astraeus()
 my_key = astraeus.save('/home/user/wow/secret.json')  # saves secret stuff
@@ -28,25 +30,37 @@ else:
     print('Error! Astraeus did not save my secret')
 ```
 
+### Customizations
+
+There are many:
+
+- `hash function`, see [the base class](astraeus/models/astraeus.py:9)
+- `memcache client`, see [the builder class](astraeus/models/memcache.py:20)
+
 ## Install
+
 ```bash
 $ pip install .
 ```
 
 ### Dependencies
+
 ```bash
 $ $(which pkg manager) install memcached libmemcached-tools  # install memcache
 ```
 
 ### Upgrade
+
 ```bash
 $ pip install . --upgrade --force-reinstall
 ```
 
 ## Contributing
+
 [Fork](https://github.com/eos-sns/astraeus/fork) | Patch | Push | [Pull request](https://github.com/eos-sns/astraeus/pulls)
 
 ## Feedback
+
 Suggestions and improvements are [welcome](https://github.com/eos-sns/astraeus/issues)!
 
 ## Authors
@@ -56,6 +70,7 @@ Suggestions and improvements are [welcome](https://github.com/eos-sns/astraeus/i
 | [Stefano Fogarollo](https://sirfoga.github.io) |
 
 ## License
+
 All of the codebases are **[MIT licensed](https://opensource.org/licenses/MIT)** unless otherwise specified.
 
 **[Back to top](#topOfReadme)**
