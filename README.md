@@ -15,6 +15,19 @@ You want to share datasets (.txt, .bin, .hdf5 ...) via downloads. You want
 - secure actual files location (because the files contain (sensitive | important)-content, that crawlers should not index)
 - hide the true location of files
 
+## Example
+```python
+astraeus = Astraeus()
+my_key = astraeus.save('/home/user/wow/secret.json')  # saves secret stuff
+
+# some days later ...
+if my_key:
+    my_val = astraeus.retrieve(my_key)
+    print(my_val)  # will print '/home/user/wow/secret.json'
+else:
+    print('Error! Astraeus did not save my secret')
+```
+
 ## Install
 ```bash
 $ pip install .

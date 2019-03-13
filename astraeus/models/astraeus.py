@@ -54,7 +54,10 @@ class Astraeus:
         """
 
         key = self.hasher(str(val))
-        return self.memcache.set(key, val)
+        if self.memcache.set(key, val):
+            return key
+
+        return None
 
     def retrieve(self, key):
         return self.memcache.get(key)
