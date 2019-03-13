@@ -61,3 +61,10 @@ class Astraeus:
 
     def retrieve(self, key):
         return self.memcache.get(key)
+
+
+class MongoAstraeus(Astraeus):
+    """ Normal Astraeus, but saves data also in MongoDB for reduncancy
+    reasons """
+
+    MONGO_DB = ''
