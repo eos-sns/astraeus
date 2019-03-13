@@ -34,8 +34,9 @@ else:
 
 There are many:
 
-- `hash function`, see [the base class](astraeus/models/astraeus.py:9)
-- `memcache client`, see [the builder class](astraeus/models/memcache.py:20)
+- `hash function`, see `astraeus.models.astraeus.Hasher`, the base class
+- `memcache client`, see `astraeus.models.memcache.MemcacheClientBuilder`, the 
+builder class
 
 ## Install
 
