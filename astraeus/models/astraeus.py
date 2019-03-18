@@ -5,7 +5,7 @@ import datetime
 import uuid
 
 from astraeus.models.memcache import MemcacheClientBuilder, MemcacheFacade
-from models.mongodb import MongoDBBuilder
+from astraeus.models.mongodb import MongoDBBuilder
 
 
 class Hasher:
@@ -41,12 +41,12 @@ class Astraeus:
         :param hash_function: function to compute hash of key
         """
 
-        self.client = MemcacheClientBuilder() \
+        client = MemcacheClientBuilder() \
             .with_server('localhost') \
             .with_port(port) \
             .build()
 
-        self.memcache = MemcacheFacade(self.client, expire_seconds)
+        self.memcache = MemcacheFacade(client, expire_seconds)
         self.hasher = hash_function  # function to hash stuff
 
     def save(self, val):
@@ -74,15 +74,15 @@ class MongoAstraeus(Astraeus):
     def __init__(self,
                  mongo_collection,
                  mongo_db=MONGO_DB,
-                 port=super().MEMCACHE_PORT,
-                 expire_seconds=super().EXPIRE_SECONDS,
+                 port=Astraeus.MEMCACHE_PORT,
+                 expire_seconds=Astraeus.EXPIRE_SECONDS,
                  hash_function=UUIDHasher().hash_key):
         super().__init__(port, expire_seconds, hash_function)
 
-        self.mongo = MongoDBBuilder() \
+        mongo = MongoDBBuilder() \
             .with_db(mongo_db) \
             .build()
-        self.mongo = self.mongo[mongo_collection]  # specify collection
+        self.mongo = mongo[mongo_collection]  # specify collection
 
     def save(self, val):
         key = super().save(val)
@@ -100,9 +100,8 @@ class MongoAstraeus(Astraeus):
 
         results = self.mongo.find({'key': key})
         if results:
-            results = sorted(results, key=lambda x: x['time'])  # sort by date
-            most_recent = results[-1]
-            return most_recent[key]
+            most_recent = max(results, key=lambda x: x['time'])  # sort by date
+            return most_recent['val']
 
         return None
 
