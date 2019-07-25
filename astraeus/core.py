@@ -19,7 +19,7 @@ class Hasher:
 class UUIDHasher(Hasher):
     """ Hashing based on UUID4 """
 
-    def hash_key(self, key):
+    def hash_key(self, key=None):
         hashed = str(uuid.uuid4())
         hashed = hashed.replace('-', '')
         return hashed
@@ -98,7 +98,7 @@ class MongoAstraeus(Astraeus):
         try:
             return self._get_parent().save(val)
         except:
-            print 'Cannot save {} to memcache'.format(val)
+            print('Cannot save {} to memcache'.format(val))
 
         return None
 
@@ -111,7 +111,7 @@ class MongoAstraeus(Astraeus):
             self.mongo.insert_one(item)
             return memcache_key
         except:
-            print 'Cannot save {} to mongodb'.format(val)
+            print('Cannot save {} to mongodb'.format(val))
 
         return None
 
@@ -124,7 +124,7 @@ class MongoAstraeus(Astraeus):
         try:
             return self._get_parent().retrieve(key)
         except:
-            print 'Cannot retrieve {} from memcache'.format(key)
+            print('Cannot retrieve {} from memcache'.format(key))
 
         return None
 
@@ -135,7 +135,7 @@ class MongoAstraeus(Astraeus):
                 most_recent = max(results, key=lambda x: x['time'])  # sort by date
                 return most_recent['val']  # DO NOT check expiration: this is a redundant database
         except:
-            print 'Cannot retrieve {} from mongodb'.format(key)
+            print('Cannot retrieve {} from mongodb'.format(key))
 
         return None
 
